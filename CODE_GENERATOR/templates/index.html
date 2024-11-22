@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css"> <!-- Use a specific theme -->
+    <title>Code Generator</title> <!-- Updated title -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+        #loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Code Generator</h2> <!-- Updated heading -->
+        <form id="questionForm" method="POST">
+            <div class="form-group">
+                <label for="input">Input:</label>
+                <input type="text" class="form-control" name="input" id="input" required>
+            </div>
+            <button type="submit" name="action" value="ask" class="btn btn-success">Ask the question</button>
+        </form>
+
+        <div id="loading" class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        {% if response %}
+            <div class="response">
+                <strong>Outputs:</strong>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="python-tab" data-toggle="tab" href="#python" role="tab" aria-controls="python" aria-selected="true">Python</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="java-tab" data-toggle="tab" href="#java" role="tab" aria-controls="java" aria-selected="false">Java</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="c-tab" data-toggle="tab" href="#c" role="tab" aria-controls="c" aria-selected="false">C</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="cpp-tab" data-toggle="tab" href="#cpp" role="tab" aria-controls="cpp" aria-selected="false">C++</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="js-tab" data-toggle="tab" href="#js" role="tab" aria-controls="js" aria-selected="false">JavaScript</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="python" role="tabpanel" aria-labelledby="python-tab">
+                        <pre><code class="language-python">{{ response }}</code></pre>
+                    </div>
+                    <div class="tab-pane fade" id="java" role="tabpanel" aria-labelledby="java-tab">
+                        <pre><code class="language-java">{{ converted_codes['java'] }}</code></pre>
+                    </div>
+                    <div class="tab-pane fade" id="c" role="tabpanel" aria-labelledby="c-tab">
+                        <pre><code class="language-c">{{ converted_codes['c'] }}</code></pre>
+                    </div>
+                    <div class="tab-pane fade" id="cpp" role="tabpanel" aria-labelledby="cpp-tab">
+                        <pre><code class="language-cpp">{{ converted_codes['c++'] }}</code></pre>
+                    </div>
+                    <div class="tab-pane fade" id="js" role="tabpanel" aria-labelledby="js-tab">
+                        <pre><code class="language-javascript">{{ converted_codes['javascript'] }}</code></pre>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#questionForm').submit(function() {
+                $('#loading').show();
+            });
+
+            // Highlight the code after the page has loaded
+            document.addEventListener('DOMContentLoaded', (event) => {
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
